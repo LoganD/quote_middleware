@@ -7,7 +7,8 @@ class QuoteGenerator
     req = Rack::Request.new(env)
     case req.path_info
     when /quote/
-      [200, {"Content-Type" => "text/html"}, ["Hello, World!"]]
+      gen = Random.new()
+      [200, {"Content-Type" => "text/plain"}, [GERVAIS_QUOTES[gen.rand(0...GERVAIS_QUOTES.length)]]]
     else
       @app.call(env)
     end

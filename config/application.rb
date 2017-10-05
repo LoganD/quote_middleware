@@ -6,6 +6,8 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+GERVAIS_QUOTES = File.readlines('data/rickygervais.txt').map{ |line| line.strip }
+
 module QuoteMiddleware
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
