@@ -1,11 +1,11 @@
 GERVAIS_TEST_QUOTES = File.readlines('./test/fixtures/files/rickygervais.txt').map{ |line| line.strip }
 
-require './lib/quote_generator'
+require 'quote_generator'
 require 'rack/mock'
 
 RSpec.describe QuoteGenerator do
   # Rack documentation uses stringified numbers for status but rails returns integer
-  default_app = [200, {'Content-Type' => 'text/html'}, ['A barebones rack app.']]
+  default_app = [200, {'Content-Type' => 'text/html'}, ['Hello World.']]
   let(:env) { double(:env) }
 
   app = Proc.new do |env|
