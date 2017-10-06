@@ -13,6 +13,7 @@ class QuoteGenerator
         [404, {"Content-Type" => "text/plain"}, []]
       elsif req.get?
         gen = Random.new()
+        # ranges generated with ... (3 dots) are exclusive of the final value
         [200, {"Content-Type" => "text/plain"}, [GERVAIS_QUOTES[gen.rand(0...GERVAIS_QUOTES.length)]]]
       else
         [404, {"Content-Type" => "text/plain"}, ["These aren't the request types you're looking for. Try a GET."]]

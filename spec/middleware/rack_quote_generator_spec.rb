@@ -4,6 +4,7 @@ require './lib/quote_generator'
 require 'rack/mock'
 
 RSpec.describe QuoteGenerator do
+  # Rack documentation uses stringified numbers for status but rails returns integer
   default_app = [200, {'Content-Type' => 'text/html'}, ['A barebones rack app.']]
   let(:env) { double(:env) }
 
