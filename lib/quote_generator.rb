@@ -1,3 +1,5 @@
+GERVAIS_QUOTES = File.readlines('data/rickygervais.txt').map{ |line| line.strip }
+
 class QuoteGenerator
   def initialize(app)
     @app = app
