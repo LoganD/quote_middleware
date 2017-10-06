@@ -15,8 +15,9 @@ RSpec.describe QuoteGenerator do
 
   it 'returns a quote on GET /quote' do
     env = Rack::MockRequest.env_for("/quote")
-    status, _, body = middleware.call(env)
+    status, headers, body = middleware.call(env)
     expect(status).to eq(200)
+    expect(headers["Content-Type"]).to include("text/plain")
     expect(GERVAIS_TEST_QUOTES).to include(body[0])
   end
 
