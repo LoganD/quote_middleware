@@ -1,3 +1,7 @@
+[![Circle CI badge](https://img.shields.io/circleci/project/logand/quote_middleware/master.svg?style=flat)](https://circleci.com/gh/logand/quote_middleware)
+
+This is a practice application built with reference to: https://github.com/chadwpry/practice/tree/master/rack-middleware
+
 Practice: Rack Middleware
 =========================
 
