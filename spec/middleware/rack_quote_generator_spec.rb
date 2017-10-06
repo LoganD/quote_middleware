@@ -4,9 +4,12 @@ require './lib/quote_generator'
 require 'rack/mock'
 
 RSpec.describe QuoteGenerator do
-  default_app = [200, {}, ['Hello, world.']]
-  let(:app) { proc { default_app } }
+  default_app = [200, {'Content-Type' => 'text/html'}, ['A barebones rack app.']]
   let(:env) { double(:env) }
+
+  app = Proc.new do |env|
+    default_app
+  end
 
   let(:middleware) { QuoteGenerator.new(app) }
 
