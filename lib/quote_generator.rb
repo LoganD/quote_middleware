@@ -4,7 +4,7 @@ MERCHANT_QUOTES = File.readlines('data/merchant_quotes.txt').map{ |line| line.st
 class QuoteGenerator
   def initialize(app)
     @app = app
-    @quote_index = nil
+    @quote_index = Queue.new
     @quotes = GERVAIS_QUOTES + MERCHANT_QUOTES
   end
 
@@ -30,15 +30,14 @@ class QuoteGenerator
   end
 
   def generate_quote_index
-    quote_queue = Queue.new
+    @quote_index.clear()
     range_array = get_randomized_array_of_quote_indexes
-    range_array.each { |elem| quote_queue.push(elem) }
-    quote_queue
+    range_array.each { |elem| @quote_index.push(elem) }
   end
 
   def get_randomized_array_of_quote_indexes
     gen = Random.new()
     range = 0...@quotes.length
-    range_array = range.to_a.shuffle
+    range_array = range.to_a.shuffle()
   end
 end
