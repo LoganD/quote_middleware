@@ -36,8 +36,7 @@ class QuoteGenerator
   end
 
   def get_randomized_array_of_quote_indexes
-    gen = Random.new()
     range = 0...@quotes.length
-    range_array = range.to_a.shuffle()
+    range.to_a.shuffle()
   end
 end
