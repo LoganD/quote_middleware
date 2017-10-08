@@ -104,7 +104,7 @@ set array[random_index] = nil
 compact array so array.length represents the number of actual values left
 ```
 ##### Step 2
-To do better I replaced the compacting of the array O(n) with additional random numbers until an actual value was found. This had a smell because as you return more quotes the number of array value access misses increases. Generating random numbers are O(1) but generating increasing numbers of them can lead to problems(https://crypto.stackexchange.com/questions/30380/how-does-generating-random-numbers-remove-entropy-from-your-system).
+To do better I replaced the compacting of the array O(n) with additional random numbers until an actual value was found. This had a smell because as you return more quotes the number of array value access misses increases. Generating random numbers are O(1) but generating increasing numbers of them can lead to [problems](https://crypto.stackexchange.com/questions/30380/how-does-generating-random-numbers-remove-entropy-from-your-system).
 
 ##### Suggested Solution
 A set was suggested to me as a solution to this like so:
@@ -131,7 +131,7 @@ The problem is that a set contains no inherent order so you'd have to maintain a
 ##### Step 3
 My solution was to switch to a queue because it has continual 0(1) access to the next element without maintaining an outside index because it has an inherent order. A stack would also work since our solution is indifferent to LIFO vs FIFO.
 
-##### Final Solution
+#### Final Solution
 By offloading the expensive computation (the creation of a randomized list of indexes) to a singular call when there is no list to reference, it makes the quote return 0(1) by using a Queue to pop off the top value.
 
 Every time all quotes have been returned or at first call - O(n)
