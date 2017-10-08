@@ -101,7 +101,7 @@ create array with range 0... quote array length exclusive
 generate random number 0... array.length
 return quote at index array[random_index]
 set array[random_index] = nil
-compact array so array.length represents number of actual values left
+compact array so array.length represents the number of actual values left
 ```
 ##### Step 2
 To do better I replaced the compacting of the array O(n) with additional random numbers until an actual value was found. This had a smell because as you return more quotes the number of array value access misses increases. Generating random numbers are O(1) but generating increasing numbers of them can lead to problems(https://crypto.stackexchange.com/questions/30380/how-does-generating-random-numbers-remove-entropy-from-your-system).
@@ -126,10 +126,10 @@ The improvement was suggested as this:
 | 1      | second element of randomized range |
 | 2      | third element of randomized range  |
 ```
-The problem is that a a set contains no inherent order so you'd have to maintain an index number count for look ups so that you can access a consecutively ordered key that maps to pre-randomized values to maintain 0(1) look ups without missing on lookup, which is also possible with my previous array implementation, thus you don't actually gain anything by using a set.
+The problem is that a set contains no inherent order so you'd have to maintain an index number count for lookups so that you can access a consecutively ordered key that maps to pre-randomized values to maintain 0(1) lookups without missing on lookup, which is also possible with my previous array implementation, thus you don't actually gain anything by using a set.
 
 ##### Step 3
-My solution was to switch to queue, because it has continual 0(1) access to the next element without maintaining and outside index because it has an inherent order. A stack would also work since our solution is indifferent to LIFO vs FIFO.
+My solution was to switch to a queue because it has continual 0(1) access to the next element without maintaining an outside index because it has an inherent order. A stack would also work since our solution is indifferent to LIFO vs FIFO.
 
 ##### Final Solution
 By offloading the expensive computation (the creation of a randomized list of indexes) to a singular call when there is no list to reference, it makes the quote return 0(1) by using a Queue to pop off the top value.
@@ -141,7 +141,7 @@ randomize values into Queue
 ```
 Each quote request - O(1)
 ```
-pop value off of queue and return the quote of the corresponding index from the quote array
+pop a value off of the queue and return the quote of the corresponding index from the quote array
 ```
 
 If the all-quotes return needs to be uniquely random on each call, then it has to create a new random order each time and is thus O(n). Otherwise, it could create one randomized order to start and keep returning that.
