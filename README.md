@@ -87,3 +87,66 @@ only sources, so look for more if they do not give a full explanation.
 
 * Setup continuous integration with Circle CI, Magnum CI, or Travis CI
 * Integrate quotes via an online API
+
+===========
+
+## Bonus Additions:
+The goal here was to extend the functionality to be able to return a random non-repeating quote, or all quotes in a randomized order.
+
+### Solution:
+##### Step 1
+My initial approach was simple but inefficient:
+```
+create array with range 0... quote array length exclusive
+generate random number 0... array.length
+return quote at index array[random_index]
+set array[random_index] = nil
+compact array so array.length represents the number of actual values left
+```
+##### Step 2
+To do better I replaced the compacting of the array O(n) with additional random numbers until an actual value was found. This had a smell because as you return more quotes the number of array value access misses increases. Generating random numbers are O(1) but generating increasing numbers of them can lead to [problems](https://crypto.stackexchange.com/questions/30380/how-does-generating-random-numbers-remove-entropy-from-your-system).
+
+##### Suggested Solution
+A set was suggested to me as a solution to this like so:
+```
+| Key    | Value |
+| ------ | -     |
+| 0      | 0     |
+| 1      | 1     |
+| 2      | 2     |
+```
+This is essentially my second approach but with a different data structure and still suffers from the misses on lookups.
+
+The improvement was suggested as this:
+
+```
+| Key    | Value                              |
+| ------ | ---------------------------------- |
+| 0      | first element of randomized range  |
+| 1      | second element of randomized range |
+| 2      | third element of randomized range  |
+```
+The problem is that a set contains no inherent order so you'd have to maintain an index number count for lookups so that you can access a consecutively ordered key that maps to pre-randomized values to maintain 0(1) lookups without missing on lookup, which is also possible with my previous array implementation, thus you don't actually gain anything by using a set.
+
+##### Step 3
+My solution was to switch to a queue because it has continual 0(1) access to the next element without maintaining an outside index because it has an inherent order. A stack would also work since our solution is indifferent to LIFO vs FIFO.
+
+#### Final Solution
+By offloading the expensive computation (the creation of a randomized list of indexes) to a singular call when there is no list to reference, it makes the quote return 0(1) by using a Queue to pop off the top value.
+
+Every time all quotes have been returned or at first call - O(n)
+```
+Create range from 0 to quote array length exclusive
+randomize values into Queue
+```
+Each quote request - O(1)
+```
+pop a value off of the queue and return the quote of the corresponding index from the quote array
+```
+
+If the all-quotes return needs to be uniquely random on each call, then it has to create a new random order each time and is thus O(n). Otherwise, it could create one randomized order to start and keep returning that.
+
+##### Further Improvements
+1) For efficiency, a background job could be added to regenerate the `@quote_index` once it reaches 10% of it's original size. The shuffle on `\all-quotes` could also be offloaded to a background task to prevent it from having to be done on the request.
+
+2) Having the shuffle on all quotes happen after returning the value to the user means it wouldn't happen on the users time and each request would have a pre-shuffled list.

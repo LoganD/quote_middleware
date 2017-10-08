@@ -1,4 +1,6 @@
-GERVAIS_TEST_QUOTES = File.readlines('./test/fixtures/files/rickygervais.txt').map{ |line| line.strip }
+GERVAIS_TEST_QUOTES = File.readlines('./spec/fixtures/files/rickygervais.txt').map{ |line| line.strip + " - Gervais" }
+MERCHANT_TEST_QUOTES = File.readlines('./spec/fixtures/files/merchant_quotes.txt').map{ |line| line.strip + " - Merchant" }
+QUOTES = GERVAIS_TEST_QUOTES + MERCHANT_TEST_QUOTES
 
 require 'quote_generator'
 require 'rack/mock'
@@ -19,7 +21,7 @@ RSpec.describe QuoteGenerator do
     status, headers, body = middleware.call(env)
     expect(status).to eq(200)
     expect(headers["Content-Type"]).to include("text/plain")
-    expect(GERVAIS_TEST_QUOTES).to include(body[0])
+    expect(QUOTES).to include(body[0])
   end
 
   it 'returns an error with empty body on POST /quote' do
@@ -36,6 +38,18 @@ RSpec.describe QuoteGenerator do
     status, _, body = middleware.call(env)
     expect(status).to eq(404)
     expect(body).to eq(["These aren't the request types you're looking for. Try a GET."])
+  end
+
+  it 'returns a randomized order of all quotes on /all-quotes' do
+    env = Rack::MockRequest.env_for("/all-quotes")
+    status, headers, body = middleware.call(env)
+    quotes_arr = body[0].split("\n")
+    expect(status).to eq(200)
+    expect(headers["Content-Type"]).to include("text/plain")
+    # expect the same number of quotes returned
+    expect(QUOTES.length).to eq(quotes_arr.length)
+    # expect all quotes to be unique
+    expect(quotes_arr.length).to eq(quotes_arr.uniq.length)
   end
 
   it 'returns the app response on anything else' do
