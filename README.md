@@ -145,3 +145,6 @@ pop a value off of the queue and return the quote of the corresponding index fro
 ```
 
 If the all-quotes return needs to be uniquely random on each call, then it has to create a new random order each time and is thus O(n). Otherwise, it could create one randomized order to start and keep returning that.
+
+##### Extra Steps
+For efficiency, a background job could be added to regenerate the `@quote_index` once it reaches 10% of it's original size. The shuffle on `\all-quotes` could also be offloaded to a background task to prevent it from having to be done on the request.
