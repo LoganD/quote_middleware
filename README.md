@@ -128,7 +128,7 @@ The improvement was suggested as this:
 ```
 The problem is that a map contains no inherent order so you'd have to maintain an index number count for lookups so that you can access a consecutively ordered key that maps to pre-randomized values to maintain 0(1) lookups without missing on lookup, which is also possible with my previous array implementation, thus you don't actually gain anything by using a map.
 
-A set with in the inputs added in a randomized order would also work since it's enumerable, but the saved index would also be necessary.
+A set with the inputs added in a randomized order would also work since it's enumerable, but the saved index from the map would still be necessary.
 
 ##### Step 3
 My solution was to switch to a queue because it has continual 0(1) access to the next element without maintaining an outside index because it has an inherent order. A stack would also work since our solution is indifferent to LIFO vs FIFO.
@@ -149,6 +149,6 @@ pop a value off of the queue and return the quote of the corresponding index fro
 If the all-quotes return needs to be uniquely random on each call, then it has to create a new random order each time and is thus O(n). Otherwise, it could create one randomized order to start and keep returning that.
 
 ##### Further Improvements
-1) For efficiency, a background job could be added to regenerate the `@quote_index` once it reaches 10% of it's original size. The shuffle on `\all-quotes` could also be offloaded to a background task to prevent it from having to be done on the request.
+1) For efficiency, a background job could be added to regenerate the `@quote_index` once it reaches 10% of it's original size. The shuffle on `/all-quotes` could also be offloaded to a background task to prevent it from having to be done on the request.
 
 2) Having the shuffle on all quotes happen after returning the value to the user means it wouldn't happen on the users time and each request would have a pre-shuffled list.
