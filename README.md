@@ -128,7 +128,7 @@ The improvement was suggested as this:
 ```
 The problem is that a map contains no inherent order so you'd have to maintain an index number count for lookups so that you can access a consecutively ordered key that maps to pre-randomized values to maintain 0(1) lookups without missing on lookup, which is also possible with my previous array implementation, thus you don't actually gain anything by using a map.
 
-A set with in the inputs added in a randomized order would also would since it's enumerable, but the saved index would also be necessary.
+A set with in the inputs added in a randomized order would also work since it's enumerable, but the saved index would also be necessary.
 
 ##### Step 3
 My solution was to switch to a queue because it has continual 0(1) access to the next element without maintaining an outside index because it has an inherent order. A stack would also work since our solution is indifferent to LIFO vs FIFO.
