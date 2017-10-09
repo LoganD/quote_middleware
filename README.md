@@ -107,7 +107,7 @@ compact array so array.length represents the number of actual values left
 To do better I replaced the compacting of the array O(n) with additional random numbers until an actual value was found. This had a smell because as you return more quotes the number of array value access misses increases. Generating random numbers are O(1) but generating increasing numbers of them can lead to [problems](https://crypto.stackexchange.com/questions/30380/how-does-generating-random-numbers-remove-entropy-from-your-system).
 
 ##### Suggested Solution
-A set was suggested to me as a solution to this like so:
+A map was suggested to me as a solution to this like so:
 ```
 | Key    | Value |
 | ------ | -     |
@@ -126,7 +126,9 @@ The improvement was suggested as this:
 | 1      | second element of randomized range |
 | 2      | third element of randomized range  |
 ```
-The problem is that a set contains no inherent order so you'd have to maintain an index number count for lookups so that you can access a consecutively ordered key that maps to pre-randomized values to maintain 0(1) lookups without missing on lookup, which is also possible with my previous array implementation, thus you don't actually gain anything by using a set.
+The problem is that a map contains no inherent order so you'd have to maintain an index number count for lookups so that you can access a consecutively ordered key that maps to pre-randomized values to maintain 0(1) lookups without missing on lookup, which is also possible with my previous array implementation, thus you don't actually gain anything by using a map.
+
+A set with in the inputs added in a randomized order would also would since it's enumerable, but the saved index would also be necessary.
 
 ##### Step 3
 My solution was to switch to a queue because it has continual 0(1) access to the next element without maintaining an outside index because it has an inherent order. A stack would also work since our solution is indifferent to LIFO vs FIFO.
